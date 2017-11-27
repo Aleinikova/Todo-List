@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -50,21 +50,6 @@ const visibilityFilter = (state = 'SHOW_ALL', action) => {
     default:
       return state;
   }
-}
-
-const combineReducers = (reducers) => {
- return (state = {}, action) => {
-   return Object.keys(reducers).reduce(
-     (nextState, key) => {
-       nextState[key] = reducers[key](
-         state[key],
-         action
-     );
-     return nextState;
-   },
-   {}
-  );
- }; 
 }
 
 const todoApp = combineReducers({todos, visibilityFilter});
