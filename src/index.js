@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Provider, connect } from 'react-redux';
+import { PropTypes } from 'prop-types';
 import { createStore } from 'redux';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -66,7 +68,6 @@ const combineReducers = (reducers) => {
 }
 
 const todoApp = combineReducers({todos, visabilityFilter});
-const store =createStore(todoApp);
 let nextTodoId = 0;
 
 const Link = ({children, active, onClick}) => {
@@ -87,6 +88,7 @@ const Link = ({children, active, onClick}) => {
 
 class FilterLink extends Component {
     componentDidMount() {
+        const { store } = this.context;
         this.unsubscribe = store.subscribe(() => {
             this.forceUpdate()
         })
@@ -98,6 +100,7 @@ class FilterLink extends Component {
 
     render() {
         const props = this.props;
+        const { store } = this.context;
         const state = store.getState();
 
         return (
@@ -115,8 +118,13 @@ class FilterLink extends Component {
     }
 }
 
+FilterLink.contextTypes = {
+    store: PropTypes.object
+  };
+
 class VisableTodoList extends Component {
     componentDidMount() {
+        const { store } = this.context;
         this.unsubscribe = store.subscribe(() => {
             this.forceUpdate()
         })
@@ -127,7 +135,8 @@ class VisableTodoList extends Component {
     }
 
     render() {
-        const state= store.getState();
+        const { store } = this.context;
+        const state = store.getState();
 
         return (
             <TodoList todos={getFilteredTodos(state.todos, state.visabilityFilter)}
@@ -140,6 +149,10 @@ class VisableTodoList extends Component {
         ) 
     }
 }
+VisableTodoList.contextTypes = {
+    store: PropTypes.object
+  };
+
 const Todo = ({ text, completed, onClick}) => {
     return (
         <li onClick={onClick}
@@ -167,7 +180,7 @@ const TodoList = ({todos, onTodoClick}) => {
     )
 }
 
-const AddTodo = ({onAddClick}) => {
+const AddTodo = ({onAddClick}, { store }) => {
     let input;
     return (
         <div>
@@ -185,6 +198,11 @@ const AddTodo = ({onAddClick}) => {
         </div>
     )
 }
+
+AddTodo.contextTypes = {
+    store: PropTypes.object
+};
+
 const Footer = () => {
     return (
         <div>
@@ -215,7 +233,7 @@ const getFilteredTodos = (todos, filter) => {
     }
 }
 
-const TodoApp = ({todos, visabilityFilter}) => {
+const TodoApp = () => {
     return (
         <div>
             <AddTodo />
@@ -226,8 +244,14 @@ const TodoApp = ({todos, visabilityFilter}) => {
 } 
 
 ReactDOM.render(
-<TodoApp {...store.getState()}/>,
-document.getElementById('root')
+    <Provider store={createStore(todoApp)}>
+        <TodoApp />
+    </Provider>,
+    document.getElementById('root')
 )
+
+Provider.childContexTypes = {
+    store: PropTypes.object
+}
 
 registerServiceWorker();
