@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
@@ -6,6 +6,29 @@ import { createStore, combineReducers } from 'redux';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
+let nextTodoId = 0;
+
+const addTodo = (text) => {
+    return {
+        type: 'ADD_TODO',
+        text,
+        id: nextTodoId++
+    }
+}
+
+const toggleTodo = (id) => {
+    return {
+        type: 'TOGGLE_TODO',
+        id,
+    }
+}
+
+const setVisibilityFilter = (filter) => {
+    return {
+        type: 'SET_VISIBILITY_FILTER',
+        filter
+    }
+}
 const todo = (state, action) => {
   switch (action.type) {
     case 'ADD_TODO':
@@ -53,7 +76,6 @@ const visibilityFilter = (state = 'SHOW_ALL', action) => {
 }
 
 const todoApp = combineReducers({todos, visibilityFilter});
-let nextTodoId = 0;
 
 const Link = ({children, active, onClick}) => {
     if (active) {
@@ -80,10 +102,7 @@ const mapStateFilterToProps = (state, props) => {
 const mapDispatchFilterToProps = (dispatch, props) => {
     return {
         onClick: () => {
-            dispatch({
-            type: 'SET_VISIBILITY_FILTER',
-            filter: props.filter,
-            })
+            dispatch(setVisibilityFilter(props.filter))
         }
     }
 }
@@ -118,7 +137,6 @@ const TodoList = ({todos, onTodoClick}) => {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state.visibilityFilter)
     return {
         todos: getFilteredTodos(state.todos, state.visibilityFilter)
     };
@@ -127,10 +145,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onTodoClick: (id) => {
-            dispatch({
-                type: 'TOGGLE_TODO',
-                id
-            });
+            dispatch(toggleTodo(id));
         }
     };
 };
@@ -143,11 +158,7 @@ let AddTodo = ({ dispatch }) => {
         <div>
             <input ref={node => input = node}/>
             <button onClick={() => {
-                dispatch({
-                    type: 'ADD_TODO',
-                    text: input.value,
-                    id: nextTodoId++
-                })
+                dispatch(addTodo(input.value))
                  input.value=''
             }}>
                 Add todo
