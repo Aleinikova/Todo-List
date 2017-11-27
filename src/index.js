@@ -122,37 +122,6 @@ FilterLink.contextTypes = {
     store: PropTypes.object
   };
 
-class VisableTodoList extends Component {
-    componentDidMount() {
-        const { store } = this.context;
-        this.unsubscribe = store.subscribe(() => {
-            this.forceUpdate()
-        })
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
-    render() {
-        const { store } = this.context;
-        const state = store.getState();
-
-        return (
-            <TodoList todos={getFilteredTodos(state.todos, state.visibilityFilter)}
-                      onTodoClick={id => {
-                        store.dispatch({
-                            type: 'TOGGLE_TODO',
-                            id 
-                        })
-                    }}/>
-        ) 
-    }
-}
-VisableTodoList.contextTypes = {
-    store: PropTypes.object
-  };
-
 const Todo = ({ text, completed, onClick}) => {
     return (
         <li onClick={onClick}
@@ -179,6 +148,26 @@ const TodoList = ({todos, onTodoClick}) => {
         </ul>
     )
 }
+
+const mapStateToProps = (state) => {
+    console.log(state.visibilityFilter)
+    return {
+        todos: getFilteredTodos(state.todos, state.visibilityFilter)
+    };
+};
+    
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onTodoClick: (id) => {
+            dispatch({
+                type: 'TOGGLE_TODO',
+                id
+            });
+        }
+    };
+};
+      
+const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
 
 const AddTodo = ({onAddClick}, { store }) => {
     let input;
@@ -237,7 +226,7 @@ const TodoApp = () => {
     return (
         <div>
             <AddTodo />
-            <VisableTodoList />
+            <VisibleTodoList />
             <Footer />
         </div>
     )
