@@ -71,41 +71,24 @@ const Link = ({children, active, onClick}) => {
     )
 }
 
-class FilterLink extends Component {
-    componentDidMount() {
-        const { store } = this.context;
-        this.unsubscribe = store.subscribe(() => {
-            this.forceUpdate()
-        })
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
-
-    render() {
-        const props = this.props;
-        const { store } = this.context;
-        const state = store.getState();
-
-        return (
-            <Link active={props.filter === state.visibilityFilter}
-                  onClick={() => {
-                      store.dispatch({
-                          type: 'SET_VISIBILITY_FILTER',
-                          filter: props.filter,
-                      })
-                  }}
-            >
-                {props.children}
-            </Link>
-        )
+const mapStateFilterToProps = (state, props) => {
+    return {
+        active: props.filter === state.visibilityFilter
     }
 }
 
-FilterLink.contextTypes = {
-    store: PropTypes.object
-  };
+const mapDispatchFilterToProps = (dispatch, props) => {
+    return {
+        onClick: () => {
+            dispatch({
+            type: 'SET_VISIBILITY_FILTER',
+            filter: props.filter,
+            })
+        }
+    }
+}
+
+const FilterLink = connect(mapStateFilterToProps, mapDispatchFilterToProps)(Link)
 
 const Todo = ({ text, completed, onClick}) => {
     return (
@@ -154,13 +137,13 @@ const mapDispatchToProps = (dispatch) => {
       
 const VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList);
 
-const AddTodo = ({onAddClick}, { store }) => {
+let AddTodo = ({ dispatch }) => {
     let input;
     return (
         <div>
             <input ref={node => input = node}/>
             <button onClick={() => {
-                store.dispatch({
+                dispatch({
                     type: 'ADD_TODO',
                     text: input.value,
                     id: nextTodoId++
@@ -173,9 +156,7 @@ const AddTodo = ({onAddClick}, { store }) => {
     )
 }
 
-AddTodo.contextTypes = {
-    store: PropTypes.object
-};
+AddTodo = connect()(AddTodo);
 
 const Footer = () => {
     return (
