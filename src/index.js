@@ -42,9 +42,9 @@ const todos = (state =[], action) => {
   }
 }
 
-const visabilityFilter = (state = 'SHOW_ALL', action) => {
+const visibilityFilter = (state = 'SHOW_ALL', action) => {
   switch (action.type) {
-    case 'SET_VISABILITY_FILTER':
+    case 'SET_VISIBILITY_FILTER':
       return action.filter;
       
     default:
@@ -67,7 +67,7 @@ const combineReducers = (reducers) => {
  }; 
 }
 
-const todoApp = combineReducers({todos, visabilityFilter});
+const todoApp = combineReducers({todos, visibilityFilter});
 let nextTodoId = 0;
 
 const Link = ({children, active, onClick}) => {
@@ -104,10 +104,10 @@ class FilterLink extends Component {
         const state = store.getState();
 
         return (
-            <Link active={props.filter === state.visabilityFilter}
+            <Link active={props.filter === state.visibilityFilter}
                   onClick={() => {
                       store.dispatch({
-                          type: 'SET_VISABILITY_FILTER',
+                          type: 'SET_VISIBILITY_FILTER',
                           filter: props.filter,
                       })
                   }}
@@ -139,7 +139,7 @@ class VisableTodoList extends Component {
         const state = store.getState();
 
         return (
-            <TodoList todos={getFilteredTodos(state.todos, state.visabilityFilter)}
+            <TodoList todos={getFilteredTodos(state.todos, state.visibilityFilter)}
                       onTodoClick={id => {
                         store.dispatch({
                             type: 'TOGGLE_TODO',
