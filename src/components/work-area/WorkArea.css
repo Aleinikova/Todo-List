@@ -1,0 +1,31 @@
+.workArea {
+  flex: 1;
+  display: flex;
+  background-color: #eddbe4;
+}
+
+.todoArea {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 10px 10px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border: 1px solid #919191;
+  /* border-radius: 5px; */
+}
+
+.todoAreaHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #919191;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.15);
+}
+
+.todoAreaBody {
+  flex: 1;
+  overflow: scroll;
+}

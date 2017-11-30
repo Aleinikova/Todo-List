@@ -1,7 +1,7 @@
 import React from 'react';
 import { FilterLink } from '../containers/FilterLink';
 
-export const Footer = () => {
+export const Filter = () => {
     return (
         <div>
             Show:

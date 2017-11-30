@@ -1,6 +1,14 @@
 const todo = (state, action) => {
     switch (action.type) {
       case 'ADD_TODO':
+        if (action.text === '') {
+          return {
+            id: action.id,
+            text: "Have a good mood",
+            completed: false,
+          };
+        }
+
         return {
           id: action.id,
           text: action.text,
