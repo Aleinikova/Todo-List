@@ -1,11 +1,13 @@
 import React from 'react';
+import './Link.css';
 
 export const Link = ({children, active, onClick}) => {
     if (active) {
-        return <span>{children}</span>
+        return <span className="currentLink">{children}</span>
     }
     return (
-        <a href="#" 
+        <a className="link"
+            href="#" 
             onClick={e => {
                 e.preventDefault();
                 onClick()}

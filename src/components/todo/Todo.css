@@ -2,7 +2,7 @@
 
 .todo {
   display: flex;
-  height: 75px;
+  height: 50px;
   padding: 0 20px;
   overflow: hidden;
   position: relative;
@@ -37,7 +37,65 @@
   text-decoration: line-through; 
 }
 
-.body {
+.todoBody {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   padding: 10px;
+}
+
+.todoTitle {
+  flex: 1;
+}
+
+#prioritySelector_low {
+  visibility: hidden;
+}
+
+#prioritySelector_medium {
+  visibility: hidden;
+}
+
+#prioritySelector_high {
+  visibility: hidden;
+}
+
+.prioritySelectors {
+  display: flex;
+}
+
+.prioritySelector {
+  margin-right: 10px;
+}
+
+.prioritySelector:last-child {
+  margin-right: 0;
+}
+
+.label {
+  position: relative;
+}
+
+.label:before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.label_low:before {
+  background-color: green;
+}
+
+.label_medium:before {
+  background-color: yellow;
+}
+
+.label_high:before {
+  background-color: red;
+}
+
+.radio:checked + .label:before {
+  border: solid 1px #919191;
 }
