@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AddTodoForm }  from '../../containers/AddTodoForm';
 import { VisibleTodoList } from '../../containers/VisibleTodoList';
 import { Filter } from '../../components/filter/Filter';
-import * as css from './WorkArea.css';
+import './WorkArea.css';
 
 class WorkArea extends Component {
   render() {
@@ -14,7 +14,7 @@ class WorkArea extends Component {
             <Filter />
           </div>
           <div className="todoAreaBody">
-            <VisibleTodoList />
+            <VisibleTodoList/>
           </div>
         </div>
       </div>

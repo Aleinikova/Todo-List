@@ -8,7 +8,7 @@ const todo = (state, action) => {
             completed: false,
           };
         }
-
+        
         return {
           id: action.id,
           text: action.text,
@@ -26,7 +26,7 @@ const todo = (state, action) => {
     }
 }
   
-export const todos = (state =[], action) => {
+const todos = (state = [], action) => {
     switch (action.type) {
       case 'ADD_TODO':
         return [
@@ -40,4 +40,17 @@ export const todos = (state =[], action) => {
       default:
         return state;
     }
+}
+
+export default todos;
+
+export const getVisibileTodos = (state, filter) => {
+  switch (filter) {
+      case 'active':
+          return state.filter(todo => !todo.completed);
+      case 'completed':
+          return state.filter(todo => todo.completed);
+      default:
+          return state;
+  }
 }
